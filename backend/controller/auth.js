@@ -17,7 +17,7 @@ const login = async (req = request, res = response) => {
             return res.status(400).json({
                 msg: 'El usuario y/o contraseñas no son correctos (Matricula)'
             })
-        }
+        } 
 
         //Aqui se valida si la contraseña es correcta
         const validarPassword = bcryptjs.compareSync(password, alumno.password) //validarPassword solo devuelve un true o false
@@ -26,9 +26,9 @@ const login = async (req = request, res = response) => {
                 msg: 'El usuario y/o contraseñas no son correctos (Contraseña)'
             })
         }
-
+        console.log(alumno.id_alumno);
         //Generar json web token
-        const token = await generarJsonWebToken(alumno.id)
+        const token = await generarJsonWebToken(alumno.id_alumno) 
 
         res.json({
             msg: `Usuario ${alumno.nombre} autenticado correctamente`,

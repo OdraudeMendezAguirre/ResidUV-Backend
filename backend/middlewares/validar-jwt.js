@@ -6,27 +6,30 @@ const validarJWT = async (req = request, res = response, next) => {
 
     const token = req.header('authorization');
 
-    if (!token) { 
-
+    //Se verifica que el usuario haya mandado el token
+    if (!token) {
+ 
         return res.status(401).json({
-            error: 'No tienes permisos para eliminar - no mando token en las cabeceras'
+            error: 'No hay token'
         })
     }
 
-    try {
+    try { 
 
-        const { matricula } = jwt.verify(token, process.env.FIRMAJWT)
-        
-        const alumno = await Alumno.findOne({ where: { matricula }})
+        //Se verifica que el token sea valido y se estrae el id del usuario
+        const { uid } = jwt.verify(token, process.env.FIRMAJWT)
+        const alumno = await Alumno.findOne({ where: { id_alumno: uid } })
 
+        //Se verifica que el alumno exista
         if(!alumno){
             return res.status(401).json({
-                error: 'No tienes permisos - usuario NO existe'
+                error: 'No tienes permisos - Alumno NO existe'
             })
         }
+       
+        //Se manda el alumno en la request
+        req.alumno = alumno 
 
-
-        req.alumno = alumno
         next();
 
     } catch (error) {

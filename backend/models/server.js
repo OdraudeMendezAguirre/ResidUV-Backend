@@ -10,11 +10,12 @@ class Server {
         this.port = process.env.PORT
         this.usuariosPath = '/api/usuarios'
         this.loginPath = '/auth'
+        this.residuosPath = '/api'
 
         // Rutas de mi aplicación
         this.dbConnection()
         this.middlewares()
-        this.routes();
+        this.routes(); 
     }
  
     async dbConnection() { 
@@ -35,8 +36,9 @@ class Server {
     }
 
     routes() {
-        this.app.use(this.usuariosPath, require('../routes/users'))
         this.app.use(this.loginPath, require('../routes/auth'))
+        this.app.use(this.usuariosPath, require('../routes/users'))
+        this.app.use(this.residuosPath, require('../routes/residuos'))
 
     }
 
